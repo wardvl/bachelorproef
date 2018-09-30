@@ -1,0 +1,84 @@
+%==============================================================================
+% Sjabloon onderzoeksvoorstel bachelorproef
+%==============================================================================
+% Gebaseerd op LaTeX-sjabloon ‘Stylish Article’ (zie voorstel.cls)
+% Auteur: Jens Buysse, Bert Van Vreckem
+
+\documentclass[fleqn,10pt]{voorstel}
+
+%------------------------------------------------------------------------------
+% Metadata over het voorstel
+%------------------------------------------------------------------------------
+
+\JournalInfo{HoGent Bedrijf en Organisatie}
+\Archive{Bachelorproef 2018 - 2019} % Of: Onderzoekstechnieken
+
+%---------- Titel & auteur ----------------------------------------------------
+
+% TODO: geef werktitel van je eigen voorstel op
+\PaperTitle{Vergelijkende studie tussen Zipkin en Jaeger: tracing \& metrics tussen microservices}
+\PaperType{Onderzoeksvoorstel Bachelorproef} % Type document
+
+% TODO: vul je eigen naam in als auteur, geef ook je emailadres mee!
+\Authors{Ward Vanlerberghe\textsuperscript{1}} % Authors
+\CoPromotor{Olivier Ketels\textsuperscript{2} (XPLORE)}
+\affiliation{\textbf{Contact:}
+  \textsuperscript{1} \href{mailto:ward.vanlerberghe.i2568@student.hogent.be}{ward.vanlerberghe.i2568@student.hogent.be};
+  \textsuperscript{2} \href{mailto:olivier.ketels@xplore.be}{olivier.ketels@xplore.be};
+}
+
+%---------- Abstract ----------------------------------------------------------
+
+\Abstract{Meer en meer organisaties kiezen voor een microservice architectuur bij het implementeren van nieuwe software oplossingen. Ook bestaande monolistische applicaties worden geleidelijk vervangen door microservice ecosystemen. De grootste moeilijkheid van dergelijke architectuur is het traceren van fouten of bottlenecks in het systeem. Hiervoor heeft het Cloud Native computing Foundation de OpenTracing standaard ontworpen. Rond deze standaard zijn tal van initiatieven ontwikkeld om de traces en metrics die door deze standaard gegenereerd worden te visualiseren en te capteren. De boedeling van dit onderzoek is na te gaan welk van deze systemen het beste kan gebruikt worden binnen XPLORE. Er wordt verwacht dat zowel Jaeger als Zipkin geschikte kandidaten zijn, wanneer welk systeem gebruikt kan worden zal echter afhangen van de reeds aanwezige architectuur in het project dat men wil instrumenteren met distrubuted tracing.}
+
+%---------- Onderzoeksdomein en sleutelwoorden --------------------------------
+% TODO: Sleutelwoorden:
+%
+% Het eerste sleutelwoord beschrijft het onderzoeksdomein. Je kan kiezen uit
+% deze lijst:
+%
+% - Mobiele applicatieontwikkeling
+% - Webapplicatieontwikkeling
+% - Applicatieontwikkeling (andere)
+% - Systeembeheer
+% - Netwerkbeheer
+% - Mainframe
+% - E-business
+% - Databanken en big data
+% - Machineleertechnieken en kunstmatige intelligentie
+% - Andere (specifieer)
+%
+% De andere sleutelwoorden zijn vrij te kiezen
+
+\Keywords{Applicatieontwikkeling. Microservices --- Tracing --- Metrics} % Keywords
+\newcommand{\keywordname}{Sleutelwoorden} % Defines the keywords heading name
+
+%---------- Titel, inhoud -----------------------------------------------------
+
+\begin{document}
+
+\flushbottom % Makes all text pages the same height
+\maketitle % Print the title and abstract box
+\tableofcontents % Print the contents section
+\thispagestyle{empty} % Removes page numbering from the first page
+
+%------------------------------------------------------------------------------
+% Hoofdtekst
+%------------------------------------------------------------------------------
+
+% De hoofdtekst van het voorstel zit in een apart bestand, zodat het makkelijk
+% kan opgenomen worden in de bijlagen van de bachelorproef zelf.
+\input{voorstel-inhoud}
+
+%------------------------------------------------------------------------------
+% Referentielijst
+%------------------------------------------------------------------------------
+% TODO: de gerefereerde werken moeten in BibTeX-bestand ``voorstel.bib''
+% voorkomen. Gebruik JabRef om je bibliografie bij te houden en vergeet niet
+% om compatibiliteit met Biber/BibLaTeX aan te zetten (File > Switch to
+% BibLaTeX mode)
+
+\phantomsection
+\printbibliography[heading=bibintoc]
+
+\end{document}
