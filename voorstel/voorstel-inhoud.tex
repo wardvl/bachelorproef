@@ -26,7 +26,7 @@ cutting- en bleeding-edge technologie is één van de punten
 waar hun toegevoegde waarde ligt.
 In deze is het voor hen van belang een duidelijk zicht te
 krijgen op welke oplossing voor distributed tracing ze in
-welke context naar voor kunnen schuiven. 
+welke context naar voor kunnen schuiven.
 
 \subsection{Doelstelling}
 Het onderzoek bestaat uit het uitvoeren van een studie van deze 
@@ -34,22 +34,29 @@ strategie waarbij in kaart gebracht wordt wat de verschillende
 voor- en nadelen, benaderingen, hulpmiddelen, etc. zijn bij een 
 polycloud aanpak.
 
+\subsection{Onderzoeksvraag}
+\begin{itemize}
+	\item Welke van deze twee tools is het best geschikt om te implementeren binnen de stack van EXPLORE?
+	\item Wat zijn de voor- en nadelen van elke tool?
+	\item Wat is de aanpak om deze tools te implementeren/instrumenteren in een bestaande of nieuwe code base?
+\end{itemize}
 %---------- Stand van zaken ---------------------------------------------------
 
 \section{State-of-the-art}
 \label{sec:state-of-the-art}
 
 \subsection{Distributed tracing}
-Distributed tracing is een techniek die wordt toegepast in het veld van gedistribueerde software systemen, ook wel microservices genoemd, die het toelaat om inzicht te krijgen over de interne samenwerking tussen deze verschillende services. Het laat toe om na te gaan waar in het systeem (lees: " in welke microservice") er iets fout loopt of waar zich een bottleneck bevindt. OpenTracing is hierbij zowat de de-facto standaard geworden voor dergelijke oplossingen.
+Distributed tracing is een techniek die wordt toegepast in het veld van gedistribueerde software systemen, ook wel microservices genoemd, die het toelaat om inzicht te krijgen over de interne samenwerking tussen deze verschillende services. Het laat toe om na te gaan waar in het systeem (lees: " in welke microservice") er iets fout loopt of waar zich een bottleneck bevindt. OpenTracing\footnote{https://opentracing.io/} is hierbij zowat de de-facto standaard geworden voor dergelijke oplossingen \autocite{Sematext2018} \autocite{Jacqueline2018}.
 
-Het instrumenteren van systemen om distributed tracing te ondersteunen was tot voor kort nog een werkintensieve en complexe opdracht. De OpenTracing standaard bracht hier verandering in en zorgt ervoor dat het instrumenteren van applicaties voor gedistribueerde tracing met een minimum aan inspanning kan verwezenlijkt worden. 
+Het instrumenteren van systemen om distributed tracing te ondersteunen was tot voor kort nog een werkintensieve en complexe opdracht. De OpenTracing standaard bracht hier verandering in en zorgt ervoor dat het instrumenteren van applicaties voor gedistribueerde tracing met een minimum aan inspanning kan verwezenlijkt worden \autocite{Gianluca2017}. 
 
-Sinds Oktober 2016 richt OpenTracing, onder begeleiding van Cloud Native Computing Foundation (CNCF), er zich op om een open, verkoperneutrale standaard voor gedistribueerde systeem instrumentatie te zijn. Het biedt developers een manier om requests te traceren van het begin tot het einde, en dit van simpele gedistribueerde systemen met slechts enkele services tot zeer complexe gedistribueerde systemen met honderden services verdeeld over verschillende systemen en zelfs verschillende fysieke locaties.
+Sinds Oktober 2016 richt OpenTracing, onder begeleiding van Cloud Native Computing Foundation (CNCF), er zich op om een open, verkoperneutrale standaard voor gedistribueerde systeem instrumentatie te zijn. Het biedt developers een manier om requests te traceren van het begin tot het einde, en dit van simpele gedistribueerde systemen met slechts enkele services tot zeer complexe gedistribueerde systemen met honderden services verdeeld over verschillende systemen en zelfs verschillende fysieke locaties \autocite{Gianluca2017}.
 
-In OpenTracing vertelt elke trace het verhaal van een transactie of een workflow die zich propageert doorheen het gedistribueerde systeem. Een trace maakt gebruik van een gerichte graaf die geen cycles bevat, elke knoop in de graaf stelt dan een stap voor in het proces met bijhorende metrics over deze stap. \autocite{Arbezzano2017}
+In OpenTracing vertelt elke trace het verhaal van een transactie of een workflow die zich propageert doorheen het gedistribueerde systeem. Een trace maakt gebruik van een gerichte graaf die geen cycles bevat, elke knoop in de graaf stelt dan een stap voor in het proces met bijhorende metrics over deze stap. \autocite{Sematext2018}
 
 \subsection{Tracing \& metrics systemen}
-Zoals in de introductie reeds vermeld is er momenteel een wildgroei aan initiatieven die een antwoord pogen te geven op het probleem van tracing en metrics collectie voor gedistribueerde systemen. Enkele voorbeelden hiervan zijn Zipkin (Twitter) en Jaeger (CNCF), die beiden de OpenTracing standaard supporten. Dergelijke systemen bieden een UI aan waarin je op een snelle en overzichtelijke manier traces met bijhorende metrics kan visualiseren om problemen in het geinstrumenteerde systeem te kunnen opsporen. Doordat dergelijke systemen de OpenTracing standaard supporten zou het op zich gemakkelijk moeten zijn om een dergelijk systeem door een nieuw systeem te vervangen, of zelfs simultaan naast elkaar te laten draaien.
+Zoals in de introductie reeds vermeld is er momenteel een wildgroei aan initiatieven die een antwoord pogen te geven op het probleem van tracing en metrics collectie voor gedistribueerde systemen. Enkele voorbeelden hiervan zijn Zipkin\footnote{https://zipkin.io/} (Twitter) en Jaeger\footnote{https://www.jaegertracing.io/} (CNCF/Uber), Application Performance Management (APM) tools die beiden de OpenTracing standaard supporten. Dergelijke systemen bieden een UI aan waarin je op een snelle en overzichtelijke manier traces met bijhorende metrics kan visualiseren om problemen in het geinstrumenteerde systeem te kunnen opsporen. Doordat dergelijke systemen de OpenTracing standaard supporten zou het op zich gemakkelijk moeten zijn om een dergelijk systeem door een nieuw systeem te vervangen, of zelfs simultaan naast elkaar te laten draaien.
+
 
 % Voor literatuurverwijzingen zijn er twee belangrijke commando's:
 % \autocite{KEY} => (Auteur, jaartal) Gebruik dit als de naam van de auteur
@@ -62,25 +69,28 @@ Zoals in de introductie reeds vermeld is er momenteel een wildgroei aan initiati
 \section{Methodologie}
 \label{sec:methodologie}
 
-In eerste instantie zal er een simplistisch gedistribueerd systeem ontwikkeld worden, dit systeem moet dienen als System Under Test (SUT) en moet een real life gedistribueerd systeem met bottlenecks simuleren. Dit kan op een eenvoudige manier gebeuren door een thread voor een bepaalde tijd te laten wachten. De verschillende services zullen elk in hun eigen Docker/Kubernetes container gedeployed worden. De code van deze services zal geïnstrumenteerd worden met behulp van de OpenTracing standaard.
+In eerste instantie zal er een simplistisch gedistribueerd systeem ontwikkeld worden. Dit systeem moet dienen als System Under Test (SUT) en moet een real life gedistribueerd systeem met bottlenecks simuleren. Dit kan op een eenvoudige manier gebeuren door een thread voor een bepaalde tijd te laten wachten. De verschillende services zullen elk in hun eigen Docker/Kubernetes container gedeployed worden. De code van deze services zal geïnstrumenteerd worden met behulp van de OpenTracing standaard.
 
 Eenmaal deze testomgeving is opgesteld kunnen we op een gemakkelijk manier de verschillende systemen voor de tracing en metrics visualisatie gaan vergelijken. Aangezien de simpliciteit van het SUT kunnen we ook gemakkelijk nagaan of de verschillende systemen consistente data visualiseren.
 
-Er zal vooral gekeken worden naar volgende punten:
+Er zal vooral gekeken worden naar volgende requirements:
 \begin{itemize}
+	\item OpenTracing compatibiliteit
 	\item Correctheid traces en metrics
+	\item Ondersteund instrumentatie voor Java
+	\item Open source
 	\item Moeilijkheidsgraad in het instrumenteren van de code
 	\item Moeilijkheidsgraad opzetten van het systeem
 	\item Grote community
 \end{itemize}
 
-In tweede instantie zal met de gegenereerde data een bevraging worden uitgevoerd bij developers. Met behulp van de gegenereerde data zal voor beide systemen gevraagd worden om zo snel mogelijk de bottleneck in het systeem te vinden. Aan de hand van de snelheid waarmee een bottleneck kan worden gevonden door een developer zal een conclusie trachten gemaakt te worden met welk systeem het meest vlot gewerkt kan worden.
+In tweede instantie zal met de gegenereerde data een bevraging worden uitgevoerd bij developers binnen XPLORE. Met behulp van de gegenereerde data zal voor beide systemen gevraagd worden om zo snel mogelijk de bottleneck in het systeem te vinden. Aan de hand van de snelheid waarmee een bottleneck kan worden gevonden door een developer zal een conclusie trachten gemaakt te worden met welk systeem het meest vlot gewerkt kan worden.
 
 %---------- Verwachte resultaten ----------------------------------------------
 \section{Verwachte resultaten}
 \label{sec:verwachte_resultaten}
 
-Aangezien de OpenTrace standaard en bijhorende systemen relatief nieuw zijn, is het moeilijk om hier reeds een verwacht resultaat neer te zetten. Verwacht word echter wel dat Jaeger gemakkelijker te instrumenteren zal zijn, aangezien dit systeem werd ontwikkeld door CNCF, die ook het OpenTrace project begeleid. De vergelijking over hoe vlot de metrics uit de systemen zijn te halen is echter moeilijker te concluderen. Veel zal hier afhangen van hoe goed de ontwerpers aan de flow van de systemen heeft gedacht.
+Aangezien de OpenTracing standaard en bijhorende systemen relatief nieuw zijn, is het moeilijk om hier reeds een verwacht resultaat neer te zetten. Verwacht wordt echter wel dat Jaeger gemakkelijker te instrumenteren zal zijn, aangezien dit systeem werd ontwikkeld door CNCF, die ook het OpenTracing project begeleidt. De vergelijking over hoe vlot de metrics uit de systemen zijn te halen is echter moeilijker te concluderen. Veel zal hier afhangen van hoe goed de ontwerpers aan de flow van de systemen hebben gedacht.
 
 %---------- Verwachte conclusies ----------------------------------------------
 \section{Verwachte conclusies}
