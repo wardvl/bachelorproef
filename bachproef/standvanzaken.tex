@@ -14,7 +14,7 @@
 
 % \textcite{Knuth1998} schreef een van de standaardwerken over sorteer- en zoekalgoritmen. Experten zijn het erover eens dat cloud computing een interessante opportuniteit vormen, zowel voor gebruikers als voor dienstverleners op vlak van informatietechnologie~\autocite{Creeger2009}.
 
-Om een duidelijk inzicht te krijgen in wat de microservice architectuur is en wat zijn voordelen en pitfalls zijn, wordt in dit hoofdstuk een toelichting uiteengezet over deze architectuur. Daarna wordt beschreven welke technieken voor handen zijn om deze pitfalls van een antwoord te bieden. Meer bepaald technieken om te achterhalen hoe de flow van een bepaalde request door de applicatie mitigeert. 
+Om een duidelijk inzicht te krijgen in wat de microservice architectuur is en wat zijn voordelen en pitfalls zijn, wordt in dit hoofdstuk een toelichting uiteengezet over deze architectuur. Daarna wordt beschreven welke technieken voor handen zijn om deze pitfalls van een antwoord te bieden. Meer bepaald technieken om te achterhalen hoe de flow van een bepaalde request door de applicatie propageert. 
 
 Na het lezen van dit hoofdstuk moet je een goed begrip hebben over wat een microservice architectuur inhoudt en welke technologieën voor handen zijn om een antwoord te bieden op de problematiek rond tracing van requests. Deze kennis zal je nodig hebben om het verdere verloop van dit document vlot te kunnen volgen.
 
@@ -38,11 +38,13 @@ Door deze frustraties zijn developers beginnen zoeken naar alternatieve manieren
 \end{figure}
 
 \section{De voordelen van een MicroService architectuur}
-Zoals reeds eerder in dit hoofdstuk vermeld heeft een microservice architectuur tal van voordelen ten opzichte van een monolithische architectuur. En deze voordelen worden enkel maar groter naar gelang een applicatie groeit. Doordat de services op zo een manier van elkaar ontkoppelt zijn, is het mogelijk om voor elke service een andere programmeertaal of databanktechnologie te gebruiken. Door de modulariteit van deze architectuur kan een zeer hoge availability gegarandeerd worden, het falen van een bepaalde service hoeft niet te betekenen dat de rest van de applicatie niet bruikbaar is. Enkel de module die faalt zal tijdelijk niet toegankelijk zijn voor eindgebruiker van de applicatie. Tevens is het veel eenvoudiger om functionaliteit aan een applicatie toe te voegen zonder de werking van de andere services (op een negatieve manier) te beïnvloeden.
+Zoals reeds eerder in dit hoofdstuk vermeld heeft een microservice architectuur tal van voordelen ten opzichte van een monolithische architectuur. En deze voordelen worden enkel maar groter naar gelang een applicatie groeit. Doordat de services op zo een manier van elkaar ontkoppelt zijn, is het mogelijk om voor elke service een andere programmeertaal of databanktechnologie te gebruiken. Door de modulariteit van deze architectuur kan een zeer hoge availability gegarandeerd worden, het falen van een bepaalde service hoeft niet te betekenen dat de rest van de applicatie niet bruikbaar is. Enkel de module die faalt zal tijdelijk niet toegankelijk zijn voor de eindgebruiker van de applicatie. Tevens is het veel eenvoudiger om functionaliteit aan een applicatie toe te voegen zonder de werking van de andere services (op een negatieve manier) te beïnvloeden.
 
 Omdat de services in verschillende processen draaien wordt het ook een stuk makkelijker om DevOps methodologieën te gaan gebruiken en de \gls{CI} en \gls{CD} principes gaan toe te passen. Deployen van nieuwe of gewijzigde functionaliteit hoeft hier geen downtime van de applicatie te betekenen.
 
-Zoals je merkt zijn de voordelen van een microservice architectuur groot. Er zijn natuurlijk nog veel meer voordelen dan die er hier staan beschreven, maar hier nog dieper op ingaan valt buiten de scope van dit onderzoek. In alle eerlijkheid is de microservice architectuur lang geen nieuw concept, zo  wordt beweert dat microservices hetzelfde is als \gls{SOA}, maar dan op een correcte manier uitgevoerd \autocite{Morris2014} \autocite{Young2016}. In een talk op microCon zegt \textcite{Young2016} zelfs dat het concept van microservices dateert van reeds 5 decennia geleden.
+Zoals je merkt zijn de voordelen van een microservice architectuur groot. Er zijn natuurlijk nog veel meer voordelen dan dat hier staat beschreven, maar hier nog dieper op ingaan valt buiten de scope van dit onderzoek.
+
+In alle eerlijkheid is de microservice architectuur lang geen nieuw concept, zo  wordt beweert dat microservices hetzelfde is als \gls{SOA}, maar dan op een correcte manier uitgevoerd \autocite{Morris2014} \autocite{Young2016}. In een talk op microCon zegt \textcite{Young2016} zelfs dat het concept van microservices dateert van reeds 5 decennia geleden.
 
 \section{De pitfalls van een MicroService architectuur}
 Zoals bij vele methodieken in softwareontwikkeling, heeft ook de microservice architectuur zijn nadelen. Het is makkelijk in te beelden dat een applicatie met een groot aantal microservices al gauw zeer complex wordt.
@@ -53,7 +55,7 @@ De grote nadelen volgens \textcite{Fowler2015} en \textcite{Hummel2018} zijn:
 	\item Verschillende databanken en transactie management kunnen een pijnpunt vormen.
 	\item Het testen van een applicatie met een microservice architectuur kan zeer moeizaam zijn. Dit komt omdat we voor elke microservice moeten confirmeren of deze daadwerkelijk in een healthy state is vooraleer we kunnen van start gaan met testen.
 	\item Het deployen van microservices kan complex zijn. Ze kunnen coördinatie nodig hebben tussen verschillende services en extra configuratie vereisen.
-	\item Het ontwikkelen van \gls{gedistribueerde systemen} kan complex zijn. Aangezien alles nu een onafhankelijke service is, moet je er voor zorgen dat elke request op een correcte manier doorheen de verschillende services mitigeert. Na verloop van tijd zullen complicaties ontstaan waarbij \gls{HTTP-request} onderhevig zijn aan lange latencies.
+	\item Het ontwikkelen van \gls{gedistribueerde systemen} kan complex zijn. Aangezien alles nu een onafhankelijke service is, moet je er voor zorgen dat elke request op een correcte manier doorheen de verschillende services propageert. Na verloop van tijd zullen complicaties ontstaan waarbij \gls{HTTP-request} onderhevig zijn aan hoge latencies.
 \end{itemize}
 
 Voor elk van deze nadelen bestaat er natuurlijk een oplossing \autocite{Hummel2018}. In dit onderzoek gaan we met name twee tools bespreken en vergelijken om op de laatste pitfall uit bovenstaande lijst een antwoord te bieden.
