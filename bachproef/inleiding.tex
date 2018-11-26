@@ -4,33 +4,31 @@
 
 \chapter{Inleiding}
 \label{ch:inleiding}
-
-De inleiding moet de lezer net genoeg informatie verschaffen om het onderwerp te begrijpen en in te zien waarom de onderzoeksvraag de moeite waard is om te onderzoeken. In de inleiding ga je literatuurverwijzingen beperken, zodat de tekst vlot leesbaar blijft. Je kan de inleiding verder onderverdelen in secties als dit de tekst verduidelijkt. Zaken die aan bod kunnen komen in de inleiding~\autocite{Pollefliet2011}:
-
-\begin{itemize}
-  \item context, achtergrond
-  \item afbakenen van het onderwerp
-  \item verantwoording van het onderwerp, methodologie
-  \item probleemstelling
-  \item onderzoeksdoelstelling
-  \item onderzoeksvraag
-  \item \ldots
-\end{itemize}
+% De inleiding moet de lezer net genoeg informatie verschaffen om het onderwerp te begrijpen en in te zien waarom de onderzoeksvraag de moeite waard is om te onderzoeken. In de inleiding ga je literatuurverwijzingen beperken, zodat de tekst vlot leesbaar blijft. Je kan de inleiding verder onderverdelen in secties als dit de tekst verduidelijkt. Zaken die aan bod kunnen komen in de inleiding~\autocite{Pollefliet2011}:
+Als dochterbedrijf van de Xplore groep, ontwikkelt XTi open source applicaties in Java met de nieuwste technologieën. Bij XTi werken ze hoofdzakelijk aan green field projecten. Met andere woorden gaan ze aan de slag met een specifieke nood van de klant en ontwikkelen hier van nul een oplossing voor. Dit zorgt voor veel vrijheid in de keuze van gebruikte technologieën en gepaste architectuur voor het op te leveren project. Eens de applicatie wordt opgeleverd aan de klant, wordt het onderhoud van de applicatie overgelaten aan een externe partij. Hierbij is het van groot belang dat de opgeleverde applicaties goed onderhoudbaar zijn om interventies na de oplevering tot een minimum te beperken.
 
 \section{Probleemstelling}
 \label{sec:probleemstelling}
-
-Uit je probleemstelling moet duidelijk zijn dat je onderzoek een meerwaarde heeft voor een concrete doelgroep. De doelgroep moet goed gedefinieerd en afgelijnd zijn. Doelgroepen als ``bedrijven,'' ``KMO's,'' systeembeheerders, enz.~zijn nog te vaag. Als je een lijstje kan maken van de personen/organisaties die een meerwaarde zullen vinden in deze bachelorproef (dit is eigenlijk je steekproefkader), dan is dat een indicatie dat de doelgroep goed gedefinieerd is. Dit kan een enkel bedrijf zijn of zelfs één persoon (je co-promotor/opdrachtgever).
+% Uit je probleemstelling moet duidelijk zijn dat je onderzoek een meerwaarde heeft voor een concrete doelgroep. De doelgroep moet goed gedefinieerd en afgelijnd zijn. Doelgroepen als ``bedrijven,'' ``KMO's,'' systeembeheerders, enz.~zijn nog te vaag. Als je een lijstje kan maken van de personen/organisaties die een meerwaarde zullen vinden in deze bachelorproef (dit is eigenlijk je steekproefkader), dan is dat een indicatie dat de doelgroep goed gedefinieerd is. Dit kan een enkel bedrijf zijn of zelfs één persoon (je co-promotor/opdrachtgever).
+Voor projecten die een grote workload kennen of een groot aantal requests moeten verwerken wordt er tegenwoordig veelal gekozen voor een microservice architectuur. Dit is bij XTi niet anders. Keuze voor deze architectuur heeft tal van voordelen voor grootschalige oplossingen. De keerzijde van de medaille ligt echter in het feit dat, in applicaties met een microservice architectuur, het moeilijk kan zijn om te achterhalen waar er in de flow zich eventuele bottlenecks voordoen. Om dit fenomeen aan te pakken is XTi op zoek naar een oplossing die een antwoord biedt op dit probleem om zo hun klanten een betere totaaloplossing te kunnen bieden. Hierbij zijn zowel XTi, hun klanten en de externe partijen, die het onderhoudt van de projecten op zich nemen, gebaat bij een integratie voorzien met tracing mogelijkheden.
 
 \section{Onderzoeksvraag}
 \label{sec:onderzoeksvraag}
+% Wees zo concreet mogelijk bij het formuleren van je onderzoeksvraag. Een onderzoeksvraag is trouwens iets waar nog niemand op dit moment een antwoord heeft (voor zover je kan nagaan). Het opzoeken van bestaande informatie (bv. ``welke tools bestaan er voor deze toepassing?'') is dus geen onderzoeksvraag. Je kan de onderzoeksvraag verder specifiëren in deelvragen. Bv.~als je onderzoek gaat over performantiemetingen, dan 
+Door de opkomst van OpenTracing, een standaard om traces te instrumenteren, is er een wildgroei ontstaan aan initiatieven die hier een antwoord op trachten te geven. Om te weten te komen welk van deze tools geschikt zijn om te gebruiken in toekomstige projecten van XTi, zal er in deze bachelorproef worden getracht een antwoord te formuleren op volgende onderzoeksvragen:
 
-Wees zo concreet mogelijk bij het formuleren van je onderzoeksvraag. Een onderzoeksvraag is trouwens iets waar nog niemand op dit moment een antwoord heeft (voor zover je kan nagaan). Het opzoeken van bestaande informatie (bv. ``welke tools bestaan er voor deze toepassing?'') is dus geen onderzoeksvraag. Je kan de onderzoeksvraag verder specifiëren in deelvragen. Bv.~als je onderzoek gaat over performantiemetingen, dan 
+\begin{itemize}
+	\item Welke van deze twee tools is het best geschikt om te implementeren binnen de stack van XTi?
+	\item Wat zijn de voor- en nadelen van elke tool?
+	\item Wat is de aanpak om deze tools te implementeren/instrumenteren in een bestaande of nieuwe code base?
+\end{itemize}
+
+Dit zal verwezenlijkt worden op basis van een requirements analyse en het opstellen van een proof of concept om zo een vergelijkende studie te maken tussen twee veelbelovende frameworks. Namelijk Zipkin\footnote{https://zipkin.io} en Jaeger\footnote{https://jaeger.io}. Tot slot zal er aan de hand van een steekproef bij developers van XTi, worden nagegaan in welk van deze twee frameworks het snelst een gesimuleerde bottleneck kan worden achterhaald.
 
 \section{Onderzoeksdoelstelling}
 \label{sec:onderzoeksdoelstelling}
-
-Wat is het beoogde resultaat van je bachelorproef? Wat zijn de criteria voor succes? Beschrijf die zo concreet mogelijk.
+% Wat is het beoogde resultaat van je bachelorproef? Wat zijn de criteria voor succes? Beschrijf die zo concreet mogelijk.
+Op het einde van deze bachelorproef moet het duidelijk zijn welk van deze twee frameworks het meest geschikt is om te gebruiken binnen de stack van XTi. Bovendien zal dit document als een leidraad moeten dienen om een van de gekozen frameworks te gaan implementeren in nieuwe projecten.
 
 \section{Opzet van deze bachelorproef}
 \label{sec:opzet-bachelorproef}
@@ -41,7 +39,7 @@ Wat is het beoogde resultaat van je bachelorproef? Wat zijn de criteria voor suc
 
 De rest van deze bachelorproef is als volgt opgebouwd:
 
-In Hoofdstuk~\ref{ch:stand-van-zaken} wordt een overzicht gegeven van de stand van zaken binnen het onderzoeksdomein, op basis van een literatuurstudie.
+In Hoofdstuk~\ref{ch:stand-van-zaken} wordt een overzicht gegeven van de stand van zaken binnen het onderzoeksdomein, op basis van een literatuurstudie. In eerste instantie wordt er een uiteenzetting gegeven over wat de mircorservice architectuur is, wat de sterke punten er van zijn en wat de pitfalls zijn. In tweede instantie wordt er beschreven welke oplossingen er voor handen zijn om een antwoord te bieden op deze pitfalls.
 
 In Hoofdstuk~\ref{ch:methodologie} wordt de methodologie toegelicht en worden de gebruikte onderzoekstechnieken besproken om een antwoord te kunnen formuleren op de onderzoeksvragen.
 
