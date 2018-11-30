@@ -1,0 +1,36 @@
+version: '2.2'
+
+services:
+
+  eureka-service:
+    image: eureka-service:latest
+    domainname: local
+    hostname: eureka-service
+    environment:
+      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+    ports:
+    - "1111:1111"
+    - "1112:8000"
+
+  zuul-service:
+    image: zuul-service:latest
+    domainname: local
+    hostname: zuul-service
+    environment:
+      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+    ports:
+    - "2222:2222"
+    - "2223:8000"
+    depends_on:
+    - eureka-service
+    - user-service
+
+  user-service:
+    image: user-service:latest
+    domainname: local
+    hostname: user-service
+    environment:
+      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+    ports:
+    - "3333:3333"
+    - "3334:8000"
