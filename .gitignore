@@ -131,3 +131,15 @@ sympy-plots-for-*.tex/
 
 # Vim-LaTeX
 *.latexmain
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
