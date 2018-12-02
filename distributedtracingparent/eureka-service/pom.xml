@@ -12,33 +12,14 @@
     <artifactId>eureka-service</artifactId>
 
     <dependencies>
-        <!--<dependency>-->
-            <!--&lt;!&ndash; Setup Spring Boot &ndash;&gt;-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--&lt;!&ndash; Setup Spring MVC & REST, use Embedded Tomcat &ndash;&gt;-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-web</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-thymeleaf</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--&lt;!&ndash; Spring Cloud starter &ndash;&gt;-->
-            <!--<groupId>org.springframework.cloud</groupId>-->
-            <!--<artifactId>spring-cloud-starter</artifactId>-->
-        <!--</dependency>-->
-
         <dependency>
             <!-- Eureka service registration - CHANGED -->
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>distributed-tracing</groupId>
+            <artifactId>opentracing-configuration</artifactId>
         </dependency>
     </dependencies>
 
@@ -53,7 +34,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>${docker-maven-plugin.spotify-version}</version>
                 <configuration>
-                    <imageName>${artifactId}</imageName>
+                    <imageName>${project.artifactId}</imageName>
                     <imageTags>
                         <imageTag>latest</imageTag>
                         <imageTag>${project.version}</imageTag>
@@ -68,7 +49,7 @@
                         <TZ>${docker-maven-plugin.TZ}</TZ>
                     </env>
                     <workdir>/service</workdir>
-                    <cmd>java $JAVA_OPTS -jar ${artifactId}-${project.version}.jar</cmd>
+                    <cmd>java $JAVA_OPTS -jar ${project.artifactId}-${project.version}.jar</cmd>
                     <!-- copy the service's jar file from target into the root directory of the image -->
                     <resources>
                         <resource>

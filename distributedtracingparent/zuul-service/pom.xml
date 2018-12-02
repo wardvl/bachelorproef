@@ -21,6 +21,10 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
+        <dependency>
+            <groupId>distributed-tracing</groupId>
+            <artifactId>opentracing-configuration</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -49,7 +53,7 @@
                         <TZ>${docker-maven-plugin.TZ}</TZ>
                     </env>
                     <workdir>/service</workdir>
-                    <cmd>java $JAVA_OPTS -jar ${artifactId}-${project.version}.jar</cmd>
+                    <cmd>java $JAVA_OPTS -jar ${project.artifactId}-${project.version}.jar</cmd>
                     <!-- copy the service's jar file from target into the root directory of the image -->
                     <resources>
                         <resource>

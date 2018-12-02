@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @EnableEurekaClient
 @Import(JaegerTracer.class)
-public class UserService {
+public class BalanceService {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UserService.class, args);
+		SpringApplication.run(BalanceService.class, args);
 	}
 }

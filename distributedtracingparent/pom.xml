@@ -12,6 +12,8 @@
         <module>eureka-service</module>
         <module>zuul-service</module>
         <module>user-service</module>
+        <module>balance-service</module>
+        <module>opentracing-configuration</module>
     </modules>
     <properties>
         <dockerHost>unix:///var/run/docker.sock</dockerHost>
@@ -20,6 +22,9 @@
         <docker-maven-plugin.registryurl>624878932454.dkr.ecr.eu-west-3.amazonaws.com/</docker-maven-plugin.registryurl>
         <docker-maven-plugin.spotify-version>0.4.11</docker-maven-plugin.spotify-version>
         <docker-maven-plugin.TZ>Europe/Brussels</docker-maven-plugin.TZ>
+        <spring-cloud-dependencies.version>Finchley.RELEASE</spring-cloud-dependencies.version>
+        <jaeger.version>0.32.0</jaeger.version>
+        <opentracing-spring-jaeger-cloud-starter.version>0.2.2</opentracing-spring-jaeger-cloud-starter.version>
     </properties>
 
     <parent>
@@ -33,9 +38,25 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Finchley.RELEASE</version>
+                <version>${spring-cloud-dependencies.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.jaegertracing</groupId>
+                <artifactId>jaeger-client</artifactId>
+                <version>${jaeger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
+                <version>${opentracing-spring-jaeger-cloud-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>distributed-tracing</groupId>
+                <artifactId>opentracing-configuration</artifactId>
+                <version>${project.version}</version>
+                <scope>compile</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
