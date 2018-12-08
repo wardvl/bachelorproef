@@ -14,6 +14,10 @@ error.path: /error
 
 # HTTP Server
 server.port: 3333   # HTTP (Tomcat) port
+opentracing:
+  zipkin:
+    http-sender:
+      baseUrl: http://zipkin-service:9411
 
 # Discovery Server Access
 #  1. DEV ONLY: Reduce the lease renewal interval to speed up registration

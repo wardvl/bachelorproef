@@ -28,15 +28,20 @@ services:
     - "80:2222"
     - "2223:8000"
 
-  jaeger-service:
-    image: jaegertracing/all-in-one:latest
+  zipkin-service:
+    image: openzipkin/zipkin:latest
     domainname: local
-    hostname: jaeger-service
+    hostname: zipkin-service
     environment:
       JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
     ports:
-      - "5555:16686"
-      - "5556:8000"
+      - "9411:9411"
+      - "6667:8000"
+    depends_on:
+      - eureka-service
+      - zuul-service
+      - user-service
+      - balance-service
 
   user-service:
     image: user-service:latest

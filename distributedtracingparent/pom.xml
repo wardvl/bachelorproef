@@ -25,6 +25,7 @@
         <spring-cloud-dependencies.version>Finchley.RELEASE</spring-cloud-dependencies.version>
         <jaeger.version>0.32.0</jaeger.version>
         <opentracing-spring-jaeger-cloud-starter.version>0.2.2</opentracing-spring-jaeger-cloud-starter.version>
+        <opentracing-spring-zipkin-cloud-starter.version>0.2.0</opentracing-spring-zipkin-cloud-starter.version>
     </properties>
 
     <parent>
@@ -57,6 +58,11 @@
                 <artifactId>opentracing-configuration</artifactId>
                 <version>${project.version}</version>
                 <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.opentracing.contrib</groupId>
+                <artifactId>opentracing-spring-zipkin-cloud-starter</artifactId>
+                <version>${opentracing-spring-zipkin-cloud-starter.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

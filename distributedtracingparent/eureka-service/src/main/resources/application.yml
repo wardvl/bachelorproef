@@ -8,9 +8,16 @@ eureka:
 server:
   port: 1111   # HTTP (Tomcat) port
 
+opentracing:
+  zipkin:
+    http-sender:
+      baseUrl: http://zipkin-service:9411
+
 # Discovery Server Dashboard uses FreeMarker.  Don't want Thymeleaf templates
 spring:
   thymeleaf:
     enabled: false     # Disable Thymeleaf
   datasource:
     type: org.springframework.jdbc.datasource.SimpleDriverDataSource
+  application:
+    name: eureka-service
