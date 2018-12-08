@@ -35,7 +35,7 @@ services:
     environment:
       JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
     ports:
-      - "9411:9411"
+      - "5555:9411"
       - "6667:8000"
     depends_on:
       - eureka-service
