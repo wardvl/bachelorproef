@@ -9,44 +9,15 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>eureka-service</module>
-        <module>zuul-service</module>
         <module>user-service</module>
-        <module>balance-service</module>
         <module>opentracing-configuration</module>
     </modules>
     <properties>
-        <dockerHost>unix:///var/run/docker.sock</dockerHost>
-        <docker-maven-plugin.baseImage>adoptopenjdk/openjdk8:jdk8u172-b11</docker-maven-plugin.baseImage>
-        <docker-maven-plugin.maintainer>ward.vanlerberghe.i2568@student.hogent.be</docker-maven-plugin.maintainer>
-        <docker-maven-plugin.registryurl>624878932454.dkr.ecr.eu-west-3.amazonaws.com/</docker-maven-plugin.registryurl>
-        <docker-maven-plugin.spotify-version>0.4.11</docker-maven-plugin.spotify-version>
-        <docker-maven-plugin.TZ>Europe/Brussels</docker-maven-plugin.TZ>
-        <spring-cloud-dependencies.version>Finchley.RELEASE</spring-cloud-dependencies.version>
-        <jaeger.version>0.32.0</jaeger.version>
         <opentracing-spring-jaeger-cloud-starter.version>0.2.2</opentracing-spring-jaeger-cloud-starter.version>
     </properties>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.1.RELEASE</version>
-    </parent>
-
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud-dependencies.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>io.jaegertracing</groupId>
-                <artifactId>jaeger-client</artifactId>
-                <version>${jaeger.version}</version>
-            </dependency>
             <dependency>
                 <groupId>io.opentracing.contrib</groupId>
                 <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
@@ -60,5 +31,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 </project>
