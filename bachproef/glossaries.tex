@@ -6,23 +6,33 @@
 \newglossaryentry{REST API}
 	{
 		name={REST API},
-		description={Een \gls{API} die gebruik maakt van HTTP-requests om data op te halen of te updaten via REST}
-	}
-\newglossaryentry{trace}
-	{
-		name={trace},
-		description={Een object dat data bevat over het gevolgde pad van een user-request binnen een applicatie in de vorm van spans}
-	}
-\newglossaryentry{span}
-	{
-		name={span},
-		description={Een unit of work voor een bepaalde REST call, uitvoering van een methode, databank call,..}
+		description={Een API die gebruik maakt van HTTP-requests om data op te halen of te updaten via REST}
 	}
 \newglossaryentry{gedistribueerde systemen}
 	{
 		name={gedistribueerde systemen},
 		description={Systemen die gespreid zijn over verschillende individuele applicaties maar die samen één grote applicatie vormen}
 	}
+\newglossaryentry{DevOps}
+{
+	name={DevOps},
+	description={Een manier van softwareontwikkeling waarbij het developmentteam en het operationsteam zeer nauw samenwerken. Bij DevOps wordt er veel gewerkt op het automatiseren en versnellen van het deployen van applicaties. Hierdoor wordt het mogelijk om dagelijks meerdere releases te deployen. Dit in tegenstelling tot agile waar de tijdsspanne tussen releases veelal gepaard gaat met de lengte van een sprint, bv. 2 weken}
+}
+\newglossaryentry{latencies}
+{
+	name={latencies},
+	description={Vertragingen tussen de aanroep van verschillende services. Bv. de vertraging die optreedt bij een HTTP-request naar een andere service}
+}
+\newglossaryentry{vendor lock-in}
+{
+	name={vendor lock-in},
+	description={Dit fenomeen kan voorvallen indien er bij het ontwikkelen van software een keuze wordt gemaakt om een bepaalde tool te gebruiken die een invasieve impact heeft op de code. Doordat de tool een implementatie nodig heeft die nagenoeg heel de codebase dekt, is het bijna onmogelijk geworden om op uw stappen terug te komen. Indien je een andere tool wenst te gebruiken dient al de code aangepast te worden waar gebruik wordt gemaakt van de tool die je wenst te vervangen. Bij grote projecten is dit vaak onbegonnen werk en ben je dus voor de rest van het project gebonden aan deze invasieve tool}
+}
+\newglossaryentry{decoreren}
+{
+	name={decoreren},
+	description={Een softwaredevelopment paradigma waarbij extra functionaliteit of informatie wordt toegevoegd aan een object door het decorator pattern toe te passen}
+}
 
 \newacronym{SOA}{SOA}{service orientated architecture}
 \newacronym{CNCF}{CNCF}{Cloud Native Computing Foundation}
@@ -33,3 +43,5 @@
 \newacronym{REST}{REST}{REpresentational State Transfer}
 \newacronym{API}{API}{Application Program Interface}
 \newacronym{OSS}{OSS}{Open-Source Software}
+\newacronym{JMH}{JMH}{Java Microbenchmark Harness}
+\newacronym{MVP}{MVP}{Minimum viable product}

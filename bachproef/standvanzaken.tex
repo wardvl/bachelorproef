@@ -40,7 +40,7 @@ Door deze frustraties zijn developers beginnen zoeken naar alternatieve manieren
 \section{De voordelen van een MicroService architectuur}
 Zoals reeds eerder in dit hoofdstuk vermeld heeft een microservice architectuur tal van voordelen ten opzichte van een monolithische architectuur. En deze voordelen worden enkel maar groter naar gelang een applicatie groeit. Doordat de services op zo een manier van elkaar ontkoppelt zijn, is het mogelijk om voor elke service een andere programmeertaal of databanktechnologie te gebruiken. Door de modulariteit van deze architectuur kan een zeer hoge availability gegarandeerd worden, het falen van een bepaalde service hoeft niet te betekenen dat de rest van de applicatie niet bruikbaar is. Enkel de module die faalt zal tijdelijk niet toegankelijk zijn voor de eindgebruiker van de applicatie. Tevens is het veel eenvoudiger om functionaliteit aan een applicatie toe te voegen zonder de werking van de andere services (op een negatieve manier) te beïnvloeden.
 
-Omdat de services in verschillende processen draaien wordt het ook een stuk makkelijker om DevOps methodologieën te gaan gebruiken en de \gls{CI} en \gls{CD} principes gaan toe te passen. Deployen van nieuwe of gewijzigde functionaliteit hoeft hier geen downtime van de applicatie te betekenen.
+Omdat de services in verschillende processen draaien wordt het ook een stuk makkelijker om \gls{DevOps} methodologieën te gaan gebruiken en de \gls{CI} en \gls{CD} principes gaan toe te passen. Deployen van nieuwe of gewijzigde functionaliteit hoeft hier geen downtime van de applicatie te betekenen.
 
 Zoals je merkt zijn de voordelen van een microservice architectuur groot. Er zijn natuurlijk nog veel meer voordelen dan dat hier staat beschreven, maar hier nog dieper op ingaan valt buiten de scope van dit onderzoek.
 
@@ -55,33 +55,42 @@ De grote nadelen volgens \textcite{Fowler2015} en \textcite{Hummel2018} zijn:
 	\item Verschillende databanken en transactie management kunnen een pijnpunt vormen.
 	\item Het testen van een applicatie met een microservice architectuur kan zeer moeizaam zijn. Dit komt omdat we voor elke microservice moeten confirmeren of deze daadwerkelijk in een healthy state is vooraleer we kunnen van start gaan met testen.
 	\item Het deployen van microservices kan complex zijn. Ze kunnen coördinatie nodig hebben tussen verschillende services en extra configuratie vereisen.
-	\item Het ontwikkelen van \gls{gedistribueerde systemen} kan complex zijn. Aangezien alles nu een onafhankelijke service is, moet je er voor zorgen dat elke request op een correcte manier doorheen de verschillende services propageert. Na verloop van tijd zullen complicaties ontstaan waarbij \gls{HTTP-request} onderhevig zijn aan hoge latencies.
+	\item Het ontwikkelen van \gls{gedistribueerde systemen} kan complex zijn. Aangezien alles nu een onafhankelijke service is, moet je er voor zorgen dat elke request op een correcte manier doorheen de verschillende services propageert. Na verloop van tijd zullen complicaties ontstaan waarbij \gls{HTTP-request} onderhevig zijn aan hoge \gls{latencies}.
 \end{itemize}
 
 Voor elk van deze nadelen bestaat er natuurlijk een oplossing \autocite{Hummel2018}. In dit onderzoek gaan we met name twee tools bespreken en vergelijken om op de laatste pitfall uit bovenstaande lijst een antwoord te bieden.
 
 \section{Distributed Tracing}
-Distributed tracing is een methode om applicaties te monitoren, hoofdzakelijk applicaties die gebruik maken van de microservice architectuur. Door het instrumenteren van code ontstaat een zogenaamde \gls{trace}. Deze \gls{trace} geeft ons informatie over de performantie van het systeem in de vorm van \gls{span}s. Bv. hoe lang een bepaalde request nodig heeft om antwoord te geven aan de caller. Een \gls{span} is hierbij de metadata van een unit of work voor een bepaalde \gls{REST} call, uitvoering van een methode, databank call,...
+Distributed tracing is een methode om applicaties te monitoren, hoofdzakelijk applicaties die gebruik maken van de microservice architectuur. Door het instrumenteren van code ontstaat een zogenaamde trace. Deze trace geeft ons informatie over de performantie van het systeem in de vorm van spans, zie figuur \ref{fig:trace}. Bv. hoe lang een bepaalde request nodig heeft om antwoord te geven aan de caller. Een span is hierbij de metadata van een unit of work voor een bepaalde \gls{REST} call, uitvoering van een methode, databank call,...
 
-Op deze manier kunnen we dus belangrijke informatie vergaren over de werking van het systeem. Door het analyseren van deze \gls{trace}s kunnen we de code van de applicatie optimaliseren en latencies van requests verlagen.
+Op deze manier kunnen we dus belangrijke informatie vergaren over de werking van het systeem. Door het analyseren van deze traces kunnen we de code van de applicatie optimaliseren en \gls{latencies} van requests verlagen.
 
 Distributed tracing is geen nieuw concept, Google bracht in 2010 reeds de paper \begin{quotation}
 	"Dapper, a Large-Scale Distributed Systems Tracing Infrastructure"
 \end{quotation} uit \autocite{36356}. Waarin de auteurs de nood van distributed tracing beschrijven en hoe ze dit hebben aangepakt binnen Google. Deze paper ligt aan de basis van veel distributed tracing tools vandaag voor handen \autocite{Mace2017}.
 
+\begin{figure}
+	\includegraphics[width=\linewidth]{img/trace_span.png}
+	\caption{Visuele weergave van een trace bestaande uit meerdere spans. Helemaal bovenaan zie je de root span, dit is de origine van de request en beschrijft de totale tijd die benodigd is om de request uit te voeren.  Onder de root span zie je de child spans. Deze beschrijven de benodigde tijd van de child requests. Het geheel van root en child spans vormt de trace. \textit{- https://datadog-docs.imgix.net/images/getting\_started/trace\_span\_image-9feba0bf.png}}
+	\label{fig:trace}
+\end{figure}
+
 \section{OpenTracing}
-Het grote probleem dat ontstond bij distributed tracing was dat elke tool zijn eigen implementatie van een \gls{trace} had. Hierdoor was het niet makkelijk om in een lopend project van tooling te veranderen indien de tool niet langer aan de verwachtingen van het systeem voldeed. Er ontstond als het ware een vendor lock-in.
+Het grote probleem dat ontstond bij distributed tracing was dat elke tool zijn eigen implementatie van een trace had. Hierdoor was het niet makkelijk om in een lopend project van tooling te veranderen indien de tool niet langer aan de verwachtingen van het systeem voldeed. Er ontstond als het ware een \gls{vendor lock-in}.
 
-De nood om een standaard te ontwikkelen die het mogelijk maakt om een applicatie te instrumenteren zonder vast te hangen aan een bepaalde tool was dus groot. In deze optiek werd OpenTracing\footnote{https://opentracing.io/} ontwikkeld onder de vlag van \gls{CNCF}\footnote{https://www.cncf.io/}. OpenTracing is een standaard die developers van applicaties, \gls{OSS} packages en \gls{OSS} services, toelaat om hun code te instrumenteren zonder zich aan een bepaalde tracing vendor te binden. Eerdere pogingen om een standaard te creëren voor distributed tracing focusten zich enkel op het encoderen en representatie van de \gls{trace} en context data. Zowel inkomende als uitgaande. Echter is dit niet voldoende om een vendor lock-in te vermijden \autocite{Sigelman2016}.
+De nood om een standaard te ontwikkelen die het mogelijk maakt om een applicatie te instrumenteren zonder vast te hangen aan een bepaalde tool was dus groot. In deze optiek werd OpenTracing\footnote{https://opentracing.io/} ontwikkeld onder de vlag van \gls{CNCF}\footnote{https://www.cncf.io/}. OpenTracing is een standaard die developers van applicaties, \gls{OSS} packages en \gls{OSS} services, toelaat om hun code te instrumenteren zonder zich aan een bepaalde tracing vendor te binden. Eerdere pogingen om een standaard te creëren voor distributed tracing focusten zich enkel op het encoderen en representatie van de trace en context data. Zowel inkomende als uitgaande. Echter is dit niet voldoende om een \gls{vendor lock-in} te vermijden \autocite{Sigelman2016}.
 
-OpenTracing biedt met name volgende standaarden aan om dit toch te verwezenlijken \autocite{Sigelman2016}:
+OpenTracing biedt verscheidene standaarden aan om dit toch te verwezenlijken \autocite{Sigelman2016}. Er is een standaard beschikbaar om spans te managen. Via simpele \gls{API}'s kan een operatie voorzien worden van een span, de span starten, stoppen of \gls{decoreren}. Verder voorziet OpenTracing een standaard, wederom met behulp van simpele \gls{API}'s, om deze spans in de vorm van een trace door te geven over de grenzen van een proces heen. Deze trace context kan ook over de grenzen van packages gepropageerd worden binnen een single proces. OpenTracing specificeert tevens een standaard voor het encoderingsformaat van de tracing context. Hierdoor kan deze context gebruikt worden door verschillende trace collectors. Enkele voorbeelden hiervan zijn Zipkin\footnote{https://openzipkin.io} en Jaeger\footnote{https://jaeger.io}.
 
-\begin{itemize}
-	\item \textbf{Gestandaardiseerde \gls{span} management:} programmatische \gls{API}'s om getimede operaties te starten, te stoppen en te decoreren ("\gls{span}s")
-	\item \textbf{Gestandaardiseerde inter-proces propagatie:} programmatische \gls{API}'s om hulp te bieden bij het doorgeven van de tracing context over de grenzen van een proces heen
-	\item \textbf{Gestandaardiseerde active \gls{span} management:} programmatische \gls{API}'s om de actieve \gls{span} op te slaan en op te vragen over de grenzen van packages die in een single process draaien
-	\item \textbf{Gestandaardiseerde in-band context encodering:} specificatie van het encoderingsformaat van de tracing context die tussen processen wordt doorgegeven
-	\item \textbf{Gestandaardiseerde out-of-band \gls{trace} data encodering:} specificatie van de gedecoreerde \gls{trace} en \gls{span} data encodering die naar de distributed tracing tool gepropageerd wordt
-\end{itemize}
+\section{OpenCensus}
+Net als OpenTracing tracht OpenCensus een antwoord te bieden op de wildgroei aan verschillende implementaties van traces. Het is een vrij nieuw initiatief dat werd opgestart door Google. De eerste release dateert van begin 2018. Het is gebaseerd op Google's interne tracing framework Census, wat al enkele jaren gebruikt wordt door Google.
 
-Sinds de opkomst van OpenTracing zijn er veel tools die deze standaard zijn beginnen te ondersteunen. Alsook Zipkin en Jeager, de twee tools die in de volgende hoofdstukken verder zullen worden uitgediept.
+Op het tijdstip van dit schrijven zijn reeds grote stappen gezet naar de verdere ontwikkeling van OpenCensus. Bij de eerste release werden slechts twee tracing collectors ondersteund, namelijk Zipkin en Google's Stackdriver\footnote{https://cloud.google.com/stackdriver/}. Door een samenwerking met Microsoft en de opensource community zijn nog geen jaar later een veel uitgebreider assortiment aan collectors beschikbaar voor OpenCensus. Momenteel worden er acht verschillende collectors ondersteund voor tracing en is er ondersteuning voor zeven verschillende programmeertalen.
+
+Tot zover zijn de verschillen tussen OpenTracing en OpenCensus niet erg groot. Ze voorzien beiden een standaard om traces te beschrijven en te exporteren naar tracing collectors. OpenCensus biedt echter nog een extra in vergelijking met OpenTracing. Met name het ondersteunen van metrics collection. Metrics collection is het vergaren van verschillende performantie gerelateerde data. Met deze data kan dan een realtime application monitoring dashboard opgezet worden zoals bijvoorbeeld DataDog\footnote{https://www.datadoghq.com/} of Grafana\footnote{https://grafana.com/}. Zo zijn we altijd in staat om de actuele status van een applicatie te monitoren en tijdig in te grijpen.
+
+\begin{figure}
+	\includegraphics[width=\linewidth]{img/metrics.png}
+	\caption{Een dashboard in Grafana visualiseert de vergaarde metrics via OpenCensus. \textit{- https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/dab37ce8-46f5-4c73-9ec1-6df0e070c805.png}}
+	\label{fig:metrics}
+\end{figure}

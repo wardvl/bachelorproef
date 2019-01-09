@@ -575,16 +575,42 @@ addtohook={%
 %
 % Je kan dit aanpassen aan de taal die je zelf het meeste gebruikt in je
 % bachelorproef.
-\newcommand{\codefragment}[2]{ \lstset{%
-  language=java,
+
+\usepackage{listings}
+
+\usepackage{color}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+
+\lstset{
+	basicstyle=\ttfamily,
+	columns=fullflexible,
+	showstringspaces=false,
+	commentstyle=\color{gray}\upshape
+}
+
+\lstdefinelanguage{XML}
+{
+	morestring=[b]",
+	morestring=[s]{>}{<},
+	morecomment=[s]{<?}{?>},
+	stringstyle=\color{black},
+	identifierstyle=\color{darkblue},
+	keywordstyle=\color{cyan},
+	morekeywords={xmlns,version,type}% list your attributes here
+}
+
+\newcommand{\codefragment}[3]{ \lstset{%
+  language=#1,
   breaklines=true,
   float=th,
-  caption={#2},
+  caption={#3},
   basicstyle=\scriptsize,
   frame=single,
   extendedchars=\true
 }
-\lstinputlisting{#1}}
+\lstinputlisting{#2}}
 
 % Leeg blad
 \newcommand{\emptypage}{%
@@ -593,3 +619,7 @@ addtohook={%
 \mbox{}
 \newpage
 }
+
+%Inline code command
+\definecolor{codegray}{gray}{0.9}
+\newcommand{\code}[1]{\colorbox{codegray}{\texttt{#1}}}

@@ -11,4 +11,193 @@
 %% mogelijke manier toegepast hebt om een antwoord te vinden op de
 %% onderzoeksvraag.
 
+In dit hoofdstuk wordt beschreven hoe er te werk is gegaan om een correct antwoord te vinden op de onderzoeksvragen.
 
+We gaan van start met een requirements analyse. Daarna gaan we kijken hoe actief de community is rond deze twee frameworks en welke libraries reeds door de community werden geïnstrumenteerd. Vervolgens gaan we voor beide tools een proof-of-concept opzetten om aan te tonen hoe we deze kunnen implementeren in een project. Als laatste stap gaan we beide frameworks benchmarken op performantie met behulp van \gls{JMH}.
+
+\section{Requirements analyse}
+Via de requirements analyse gaan we na aan welke functionele en niet functionele requirements de frameworks moeten voldoen om deze succesvol in de stack van XTi te kunnen implementeren. In eerste instantie gaan we bekijken aan welke functionele requirements moet worden voldaan. Daarna lijsten we de niet functionele requirements op.
+
+\subsection{Functionele requirements}
+\begin{itemize}
+	\item Vergaren van span data
+	\item Span data word geaggregeerd in traces
+	\item Traces zijn exporteerbaar naar verschillende backends
+	\item Ondersteuning voor Java
+\end{itemize}
+
+\subsection{Niet functionele requirements}
+\begin{itemize}
+	\item Minimale impact op code base
+	\item Minimale impact op performantie
+	\item Grote betrouwbaarheid
+	\item Mogelijkheid om eenvoudig over te schakelen naar een andere backend
+\end{itemize}
+
+\section{Onderzoek naar de community}
+Om na te gaan hoe actief de community is voor elke standaard gaan we de desbetreffende github repositories vergelijken. We gaan ons voornamelijk op de Java en JavaScript repositories toespitsen. Implementaties voor andere programmeertalen zijn voor dit onderzoek van geen belang.
+
+We gaan voor elke standaard na hoeveel forks, pull requests en contributors er zijn voor de desbetreffende libraries, op die manier kunnen we een beeld schetsen over de community en hoe actief ze al dan niet is. In tabel \ref{tbl:opentracingcontrib} zien we de statistieken van de OpenTracing repositories\footnote{https://github.com/opentracing} voor de Java en JavaScript implementaties. In tabel \ref{tbl:opencensuscontrib} de statistieken voor de OpenCensus repositories\footnote{https://github.com/census-instrumentation} van de Java en Node.js implementaties. Zoals we kunnen zien zijn voor de Java implementatie, met uitzondering van het aantal pull requests, vergelijkbare contributies te zien. Ook voor de JavaScript, respectievelijk Node.js voor OpenCensus, zien we gelijkaardige resultaten.
+
+Verder kijken we naar de contribution repositories voor OpenTracing\footnote{https://github.com/opentracing-contrib} en OpenCensus\footnote{https://github.com/census-instrumentation/opencensus-java/tree/master/contrib}. Dit zijn de repositories waar de community hun geïnstrumenteerde libraries of add-ons kunnen toevoegen. In tabel \ref{tbl:instrumented_libraries} zien we een overzicht van de reeds geïnstrumenteerde Java libraries door de community voor beide frameworks. Zoals we kunnen zien is op dit gebied de OpenTracing community een flink stuk actiever. Op het moment van schrijven zijn er voor OpenTracing maar liefst 30 Java libraries die door de community geïnstrumenteerd werden. Dit tegenover slechts 6 Java libraries voor OpenCensus.
+\begin{table}
+	\caption{GitHub statistieken OpenTracing van 13-12-2015 tot en met 01-01-2019}
+	\label{tbl:opentracingcontrib}
+	\begin{center}
+		\begin{tabular}{| p{5cm} | l | l | l |}
+			\hline
+			Library & Aantal forks & Aantal pull requests & Aantal contributors \\ \hline
+			opentracing-java & 197 & 203 & 31 \\ \hline
+			opentracing-javascript & 58 & 70 & 21 \\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+\begin{table}
+	\caption{GitHub statistieken OpenCensus van 15-05-2016 tot en met 01-01-2019}
+	\label{tbl:opencensuscontrib}
+	\begin{center}
+		\begin{tabular}{| p{5cm} | l | l | l |}
+			\hline
+			Library & Aantal forks & Aantal pull requests & Aantal contributors \\ \hline
+			opencensus-java & 123 & 1342 & 29 \\ \hline
+			opencensus-node & 39 & 188 & 28 \\ \hline
+		\end{tabular}
+	\end{center}
+	
+\end{table}
+\begin{table}
+	\label{tbl:instrumented_libraries}
+	\caption{Door de community geïnstrumenteerde libraries}
+	\begin{center}
+	\begin{tabular}{| p{5cm} | l | l |}
+	\hline
+	\textbf{Library} & \textbf{OpenTracing} & \textbf{OpenCensus} \\ \hline \hline
+	Apache HttpClient & ja & nee \\ \hline
+	Apache Kafka & ja & nee \\ \hline
+	Apache Thrift & ja & nee \\ \hline
+	JDBC & ja & nee \\ \hline
+	Redis & ja & nee \\ \hline
+	Redisson & ja & nee \\ \hline
+	gRPC & ja & ja \\ \hline
+	Spring & ja & ja \\ \hline
+	JDBI & ja & nee \\ \hline
+	JaxRS & ja & nee \\ \hline
+	Java Web Servlet & ja & ja \\ \hline
+	Elasticsearch Client & ja & nee \\ \hline
+	AWS SDK & ja & nee \\ \hline
+	Hazelcast & ja & nee \\ \hline
+	JMS & ja & nee \\ \hline
+	P6Spy & ja & nee \\ \hline
+	RabbitMQ & ja & nee \\ \hline
+	Java Concurrent library & ja & nee \\ \hline
+	Solr client & ja & nee \\ \hline
+	RxJava & ja & nee \\ \hline
+	Neo4j Driver & ja & nee \\ \hline
+	Memcached Client & ja & nee \\ \hline
+	Mongo Driver & ja & nee \\ \hline
+	Cassandra Driver & ja & nee \\ \hline
+	Akka & ja & nee \\ \hline
+	OkHttp & ja & nee \\ \hline
+	Vert.x web & ja & nee \\ \hline
+	CDI (Context and Dependency Injection) & ja & nee \\ \hline
+	Dropwizard & ja & ja \\ \hline
+	HpROSE & ja & nee \\ \hline
+	AppEngine & nee & ja \\ \hline
+	Http Jetty Client & nee & ja \\ \hline \hline
+	\textbf{Totaal} & 30 & 6 \\ \hline
+	\end{tabular}
+\end{center}
+\end{table}
+
+Zoals reeds vermeld in hoofdstuk \ref{ch:stand-van-zaken} biedt OpenCensus ook out-of-the-box ondersteuning voor het vergaren en exporteren van metrics. Als we wat verder kijken in de contribution repository van OpenTracing vinden we dat de community voor dit framework ook een metrics collector en exporter heeft ontwikkelt voor Java\footnote{https://github.com/opentracing-contrib/java-metrics}.
+
+\section{Proof-of-concept}
+In deze sectie gaan we voor beide frameworks een proof-of-concept opstellen. Hierbij gaan we een project aanmaken in Springboot en de te volgen stappen voor beide frameworks beschrijven.
+
+\subsection{OpenTracing}
+\subsubsection{Aanmaken root project}
+We maken een nieuw maven project aan in onze IDE (Voor dit onderzoek wordt steeds gebruik gemaakt van de IntelliJ IDE) en definiëren onze dependencies in de pom file.
+
+Bij OpenTracing kunnen we kiezen voor een dependency die automatisch een tracer configureert voor een bepaalde backend. Er is keuze tussen Jaeger en Zipkin. Dit kan handig zijn indien je op voorhand een keuze maakt voor Jaeger of Zipkin. In dit onderzoek kiezen we gebruik maken van de Jaeger backend voor het visualiseren van de traces.
+
+Aangezien we willen ontwikkelen voor een microservicearchitectuur maken we een aparte module aan die de configuratie van onze tracing bevat. Zo kunnen we voor elke service deze module importeren via een dependency. Zo dienen we de configuratie slechts in deze module aan te passen indien we deze willen veranderen in plaats van in elke service individueel.
+
+In de root pom.xml gaan we eerst de dependency management opzetten en onze modules toevoegen, namelijk de configuratie voor de tracing en een microservice module.
+\codefragment{xml}{../distributedtracingparent/pom.xml}{Root dependency management en project settings.}
+
+\subsubsection{Aanmaken tracing configuratie module}
+Onder het root project maken we een nieuwe module aan voor de configuratie van onze tracing met als parent ons root project. We gebruiken de dependency die we in onze root pom hebben gedefinieerd.
+\codefragment{XML}{../distributedtracingparent/opentracing-configuration/pom.xml}{pom.xml voor de tracing configuratie.}
+
+Verder dienen we in deze module enkel een configuratie bean te voorzien voor de tracer.
+
+\codefragment{java}{../distributedtracingparent/opentracing-configuration/src/main/java/be/hogent/distributedtracing/tracer/JaegerTracer.java}{Spring configuratie die een bean van een tracer voorziet.}
+
+\subsubsection{Aanmaken module voor microservice}
+Terug onder het root project maken we een nieuwe module aan met als parent het root project. Deze module zal de microservice bevatten met een eenvoudige \gls{REST} \gls{API}.
+
+We starten terug met het toevoegen van de juiste dependencies aan de pom file. In dit triviale geval zullen we enkel een dependency nodig hebben naar onze "opentracing-configuration" module en naar de "spring-boot-starter-web" module.
+
+\codefragment{XML}{../distributedtracingparent/user-service/pom.xml}{pom.xml voor een triviale microservice.}
+
+Aangezien we een springboot applicatie maken voorzien we een application.yml voor de applicatie parameters.
+
+\codefragment{java}{../distributedtracingparent/user-service/src/main/resources/application.yml}{Configuratie van de springboot applicatie. We laten de webservice op poort 3333 draaien.}
+
+Vervolgens maken we de entrypoint aan om de applicatie te kunnen opstarten. Hier importeren we ook de configuratie bean voor de tracer.
+
+\codefragment{java}{../distributedtracingparent/user-service/src/main/java/be/hogent/distributedtracing/UserService.java}{De entrypoint om de applicatie op te starten. Hier importeren we ook onze tracing configuratie.}
+
+Er rest ons enkel nog een REST endpoint aan te maken. Het volstaat om volgende klasse aan te maken, springboot zorgt voor het aanmaken van een instantie en het beschikbaar stellen van de endpoint.
+
+\codefragment{java}{../distributedtracingparent/user-service/src/main/java/be/hogent/distributedtracing/controllers/UserController.java}{De REST controller. Springboot zorgt voor het open stellen van de endpoint.}
+
+\subsubsection{Omgeving opstarten}
+Nu we de code geschreven hebben kunnen we deze compileren. In de root directory van het project voeren we het volgende commando uit:
+\begin{list}{}{}
+	\item \code{mvn clean install}
+\end{list}
+
+In de volgende stap maken we de omgeving klaar om de service en een Jaeger instantie op te draaien. We dienen eerst enkele omgevingsvariabelen te initialiseren zodat de service weet hoe hij met de Jaeger instantie moet communiceren. Elke variabele die kan gedeclareerd worden om Jaeger van de gewenste configuratie te voorzien wordt opgelijst in tabel \ref{tbl:jaeger}.
+
+\begin{table}
+	\label{tbl:jaeger}
+	\caption{Omgevingsvariabelen voor configuratie van een Jaeger client}
+	\begin{center}
+		\scalebox{.85}{
+			\begin{tabular}{| l | l | p{5cm} |}
+				\hline
+				\textbf{Property} & \textbf{Vereist} & \textbf{Omschrijving} \\ \hline
+				JAEGER\_SERVICE\_NAME & ja & De naam van de service \\ \hline
+				JAEGER\_AGENT\_HOST & nee & De hostnaam waarop de Jaeger instantie draait om te communiceren via UDP \\ \hline
+				JAEGER\_AGENT\_PORT & nee & De poort waarop de Jaeger instantie luistert naar inkomende traces \\ \hline
+				JAEGER\_ENDPOINT & nee & De traces endpoint voor het geval de client een directe verbinding heeft met de collector, bv. http://jaeger-collector:14268/api/traces \\ \hline
+				JAEGER\_AUTH\_TOKEN & nee & Authentication Token om te authenticeren naar de endpoint \\ \hline
+				JAEGER\_USER & nee & Username voor basis authenticatie naar de endpoint \\ \hline
+				JAEGER\_PASSWORD & nee & Password voor basis authenticatie naar de endpoint \\ \hline
+				JAEGER\_PROPAGATION & nee & Comma separated list van trace formats om een trace context te propageren\footnote{Deze optie bestaat om het mogelijk te maken, om traces die via de Zipkin instrumentatie zijn aangemaakt, te propageren naar Jaeger}. Defaults is dit het standaard Jaeger formaat. Geldige waardes zijn jaeger en b3 \\ \hline
+				JAEGER\_REPORTER\_LOG\_SPANS & nee & Bepaalt of de loggingreporter ook de spans moet loggen \\ \hline
+				JAEGER\_REPORTER\_MAX\_QUEUE\_SIZE & nee & Bepaalt de grootte van de queue voor de loggingreporter \\ \hline
+				JAEGER\_REPORTER\_FLUSH\_INTERVAL & nee & Bepaalt de flushinterval voor de loggingreporter in ms. \\ \hline
+				JAEGER\_SAMPLER\_TYPE & nee & Het type van de sampler\footnote{https://www.jaegertracing.io/docs/1.8/sampling/\#client-sampling-configuration} \\ \hline
+				JAEGER\_SAMPLER\_PARAM & nee & Bepaalt hoe vaak er gesampled wordt. Dit is een numerieke waarde tussen 1 en 0\footnote{Grenzen inbegrepen}. Waarbij 1 staat voor altijd sampelen en 0 voor nooit sampelen. \\ \hline
+				JAEGER\_SAMPLER\_MANAGER\_HOST\_PORT & nee & Indien gebruik wordt gemaakt van de remote sampler moet hier de hostname en poort gedefinieerd worden om met de remote sampler te kunnen communiceren \\ \hline
+				JAEGER\_TAGS & nee & Een comma separated list om tags te voorzien in de traces. Een tag wordt 	als key-pair meegegeven in de vorm van \code{tagName = value} \\ \hline
+			\end{tabular}
+		}
+	\end{center}
+\end{table}
+
+Voor deze eenvoudige applicatie gebruiken we enkel \code{JAEGER\_SERVICE\_NAME}, \code{JAEGER\_AGENT\_HOST}, \code{JAEGER\_AGENT\_PORT} en \code{JAEGER\_SAMPLER\_PARAM}. Dit omdat we gebruik gaan maken van de Docker\footnote{https://www.docker.com/products/docker-engine} image van de Jaeger backend. In een terminal\footnote{We maken gebruik van een Unix omgeving met een bash terminal} geven we volgende commando's in:
+\begin{list}{}{}
+	\item \code{export JAEGER\_SERVICE\_NAME=user-service}
+	\item \code{export JAEGER\_AGENT\_HOST=localhost}
+	\item \code{export JAEGER\_AGENT\_PORT=14268}
+	\item \code{export JAEGER\_SAMPLER\_PARAM=1}
+	\item \code{export JAEGER\_SAMPLER\_MANAGER\_HOST\_PORT=localhost:5778}
+\end{list}
+In de volgende stap gaan we de Jaeger Docker container opstarten\footnote{Hiervoor is de installatie van de Docker engine nodig}. We voeren het commando uit in de terminal:
+\begin{list}{}{}
+	\item \code{docker run -d -{}-name jaeger -p 16686:16686 -p 14268:14268 -p 5778:5778 \textbackslash}
+	\item \code{jaegertracing/all-in-one:1.8}
+\end{list}
