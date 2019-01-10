@@ -1,8 +1,0 @@
-# Spring properties
-spring:
-  application:
-    name: user-service  # Service registers under this name
-
-# HTTP Server
-server.port: 3333   # HTTP (Tomcat) port
-
