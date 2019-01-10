@@ -1,0 +1,22 @@
+version: '2'
+
+services:
+
+  jaeger-service:
+    image: jaegertracing/all-in-one:latest
+    domainname: local
+    hostname: jaeger-service
+    ports:
+      - "5555:16686" #UI
+
+  user-service:
+    image: user-service:latest
+    domainname: local
+    hostname: user-service
+    environment:
+      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+      JAEGER_AGENT_HOST: jaeger-service
+      JAEGER_SAMPLER_PARAM: 1
+    ports:
+    - "3333:3333" #service
+    - "8000:8000"
