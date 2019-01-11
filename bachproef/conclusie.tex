@@ -11,4 +11,28 @@
 %% over het resultaat. Had je deze uitkomst verwacht? Zijn er zaken die nog
 %% niet duidelijk zijn? Heeft het onderzoek geleid tot nieuwe vragen die
 %% uitnodigen tot verder onderzoek?
+In dit hoofdstuk gaan we een conclusie trekken rond de gestelde onderzoeksvragen. We gaan voor elke vraag trachten een antwoord te formuleren. Aan de hand van deze antwoorden trekken we een besluit welk van de twee frameworks, OpenTracing of OpenCensus, het meest geschikt is om te gebruiken in een productieomgeving binnen projecten van XTi.
 
+\section{Bevindingen}
+Tijdens dit onderzoek werd duidelijk dat beide tools zeer vergelijkbaar zijn. Er zitten echter wat fundamentele design verschillen in beide tools, elk met zijn eigen voor- en nadelen.
+
+Zo kiest OpenTracing om enkel een standaard te voorzien voor de tracing en span contexts. OpenTracing berust dan hoofdzakelijk op de community en tracing vendors om hun tools te voorzien van een OpenTracing implementatie. Zoals we hebben kunnen merken in het onderzoek naar de community is hier echter een groot draagvlak voor. Er bestaan inderdaad tal van tracing backends die de standaard ondersteunen en tal van frequent gebruikte libraries zijn reeds voorzien van een instrumentatie met OpenTracing, dit hebben we weergegeven in tabel \ref{tbl:instrumented_libraries}. Dit spaart ontzettend veel werk bij het ontwikkelen van een nieuwe microservice applicatie.
+
+OpenCensus heeft het op dit vlak duidelijk over een andere boeg gegooid. OpenCensus berust veel minder op de community en tracht voor de voornaamste \gls{OSS} tracing systemen een exporter te ontwikkelen. Hierdoor is OpenCensus veel minder afhankelijk van de goodwill van tracing vendors en van de community. Dat is ook duidelijk te blijken uit het onderzoek naar de community. Er zijn veel minder libraries die out-of-the-box tracing voorzien bij gebruik van OpenCensus. Gelukkig is er wel een instrumentatie voorzien voor spring applicaties, wat toch het belangrijkste framework is in de Java wereld en voor XTi. Hierbij moeten we wel nog annotaties toevoegen aan de methodes die we wensen te voorzien van een trace. Dit heeft toch wel enkele gevolgen, we demonstreren met een voorbeeld.
+
+Stel dat we een bestaande spring boot code base wensen te voorzien van tracing mogelijkheden via OpenTracing. Het volstaat hier om de juiste dependency aan ons project toe te voegen en een bean configuratie te voorzien voor de gewenste tracing backend. Indien we dezelfde functionaliteit wensen te bereiken via OpenCensus moeten we daar bovenop, elke methode in de code base die we wensen te voorzien van tracing mogelijkheden gaan annoteren. Het spreekt voor zich dat dit een heuse karwij is en gevoelig is voor fouten of onvolledige instrumentatie. Bovendien gaan we door de talrijke extra annotaties onze code "vervuilen".
+
+Indien we een nieuw project van tracing wensen te voorzien is de impact van het gebruik van OpenCensus minder groot. We kunnen namelijk vanaf de start van het project de juiste methodes van de annotatie voorzien. Blijft natuurlijk nog steeds het aspect van de "vervuilde" code.
+
+De complexiteit voor het configureren van beide frameworks is quasi vergelijkbaar. Voor OpenCensus ligt de complexiteit ietwat hoger dan voor OpenTracing. Het overschakelen naar een andere backend heeft een identieke complexiteit voor beide frameworks, namelijk O(1). Beide frameworks zijn ook even betrouwbaar en leveren correcte trace data.
+
+We moeten echter wel rekening houden dat op het moment van schrijven OpenCensus nog maar een jaar geleden gereleased is en nog steeds in een, weliswaar stabiele, beta versie zit. Er is nog veel aan het gebeuren bij OpenCensus en de verwachtingen liggen hoog. OpenTracing daarentegen is reeds een matuurder framework en we weten wat we ervan kunnen verwachten.
+
+\section{Besluit}
+We kunnen stellen dat beide frameworks voldoen aan de functionele requirements. Beide frameworks zijn in staat om op een correcte manier trace en span data te vergaren en te exporteren naar een gewenste backend. Beide frameworks bieden tevens ondersteuning voor Java.
+
+Kijken we naar de niet functionele requirements, dan kunnen we concluderen dat OpenTracing en OpenCensus beiden betrouwbare data genereren. Beide frameworks zijn voorzien van een extensieve test suite om de betrouwbaarheid van de gegenereerde data te borgen. Ook het overschakelen naar een andere tracing backend is voor beide frameworks even eenvoudig en kan met een O(1) complexiteit.
+
+Als we echter kijken naar de impact op de code base van beide frameworks krijgen we echter een duidelijk verschil te zien. Dankzij de vele bijdrages door de community is OpenTracing weinig tot niet invasief op de code base. Voor OpenCensus is dit een ander verhaal en vergt toch wel wat aanpassingen aan de code base om instrumentatie te voorzien. Als we gebruik maken van de spring instrumentatie beperkt zich dit tot een annotatie per methode. Als we echter geen gebruik maken van spring wordt OpenCensus zeer invasief en zal de leesbaarheid van de code sterk be"invloed worden.
+
+Door al deze bevindingen kunnen we dus besluiten dat het matuurdere OpenTracing de beste optie is om te gaan gebruiken in projecten. We verwachten echter ook veel van OpenCensus in de toekomst, maar het is duidelijk dat het framework op dit moment nog niet matuur genoeg is om nu reeds in projecten te gaan gebruiken. Het vergt echter de moeite om dit framework verder op te volgen en te kijken hoe het verder evolueert.

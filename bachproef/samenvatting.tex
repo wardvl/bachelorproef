@@ -36,4 +36,16 @@
 % De samenvatting in de hoofdtaal van het document
 
 \chapter*{\IfLanguageName{dutch}{Samenvatting}{Abstract}}
+XTi is een software leverancier met hoofdkantoor in Kontich en een onderdeel van de Xplore groep. XTi werkt voor haar projecten hoofdzakelijk met de microservice architectuur geschreven in Java. Werken met een microservice architectuur is echter een complex gegeven. Bij grote applicaties krijgt men al snel een complexe dependency tree van de verschillende microservices. Hierdoor wordt het moeilijk om te achterhalen waar eventuele vertragingen, ofwel bottlenecks, zich voordoen binnen de applicatie.
 
+Om hun klanten van een betere dienstverlening te kunnen voorzien is XTi daarom op zoek naar een oplossing om deze bottlenecks efficiënt te kunnen achterhalen en op te lossen. Om dit te verwezenlijken wordt in deze bachelorproef een vergelijkende studie gemaakt tussen twee potentiële kandidaat frameworks die hier een antwoord op kunnen bieden. Namelijk OpenTracing en OpenCensus. Beide frameworks zijn open-source en trachten een antwoord te bieden op de complexe materie van tracing binnen een microservice architectuur.
+
+Beide frameworks bieden de mogelijkheid om een tracing backend naar keuze te gebruiken zonder aanpassingen te moeten doen aan de code base. Ze bieden dus een standaard voor de tracing context zodat deze kan geëxporteerd worden naar een backend naar keuze. In dit onderzoek gaan we na welk van deze twee frameworks het beste binnen de stack van XTi past.
+
+Dit gaan we verwezenlijken door middel van een vergelijkende studie. In de eerste fase van het onderzoek gaan we na wat de requirements zijn voor een geschikt framework. We bekijken hier zowel de functionele als niet functionele requirements. In een volgende fase onderzoeken we hoe de verhouding tussen de frameworks en de community ligt. Beide frameworks zijn namelijk open-source en we voeren onderzoek naar het draagvlak voor beide frameworks. In de laatste fase van dit onderzoek maken we voor beide frameworks een proof-of-concept. Hierdoor kunnen we met de hands-on praktijk ervaring een beter beeld krijgen welke tool het meest belovend is.
+
+Uit de requirements analyse blijkt dat beide frameworks voldoen aan de functionele requirements. Het verschil ligt hem echter in de niet functionele requirements. Waarbij OpenCensus het onderspit delft qua impact op de code base van een project. Ook uit het onderzoek naar de community is er duidelijk een positievere trend op te merken in het voordeel van OpenTracing. De OpenTracing community heeft reeds veel werk verricht en tal van frequent gebruikte libraries geïnstrumenteerd.
+
+Bij het uitwerken van de proof-of-concept merken we dat beide frameworks gemakkelijk te integreren vallen in een nieuw project. Het wordt echter reeds snel duidelijk dat OpenCensus voorlopig nog een erg invasieve stijl heeft op de code base. Dit is hoofdzakelijk te wijten aan het gebrek van beschikbare geïnstrumenteerde libraries voor OpenCensus.
+
+We kunnen dus het besluit vormen dat het OpenTracing framework op dit moment de voorkeur geniet op dat van OpenCensus. Er wordt echter nog hard gewerkt aan OpenCensus en het is zeker de moeite waard om het framework verder op te volgen.

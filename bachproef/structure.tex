@@ -601,11 +601,12 @@ addtohook={%
 	morekeywords={xmlns,version,type}% list your attributes here
 }
 
-\newcommand{\codefragment}[3]{ \lstset{%
+\newcommand{\codefragment}[4]{ \lstset{%
   language=#1,
   breaklines=true,
   float=th,
   caption={#3},
+  label={#4},
   basicstyle=\scriptsize,
   frame=single,
   extendedchars=\true
